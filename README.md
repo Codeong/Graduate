@@ -1,2 +1,7 @@
 # Graduate
-A code club project
+A Code Club project
+
+# Credits
+- vSparkyy (Harshil)
+- jarmishan (Jarmishan)
+- Effley (Mark)
