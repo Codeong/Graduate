@@ -23,9 +23,9 @@ MAP = [
     '#                                  #',
     '#                         #####    #',
     '#                                  #',
-    '#  #######                         #',
     '#                                  #',
-    '#                  #####           #',
+    '#                                  #',
+    '########           #####           #',
     '#                                  #',
     '#                                  #',
     '#                                  #',
@@ -33,13 +33,13 @@ MAP = [
     '#                                  #',
     '#                                  #',
     '#                                  #',
-    '#               #####              #',
+    '#               #########          #',
     '#                                  #',
     '#                                  #',
     '#                                  #',
-    '#       #######                  ###',
-    '#                           ##     #',
-    '#                     ##           #',
+    '#       #########                ###',
+    '#                                  #',
+    '#                       #####      #',
     '######                             #',
     '#                 ##               #',
     '#                                  #',
@@ -59,24 +59,21 @@ for y, row in enumerate(MAP):
 
 class Player:
     def __init__(self):
-        self.rect = pygame.Rect(128, 128, self.WIDTH, self.HEIGHT)
-        
-        # Size of player sprite
-        self.WIDTH, self.HEIGHT = 64, 64
-
+        self.rect = pygame.Rect(128, 128, 64, 64)
         self.velocity = 0
 
         # Physics constants
         self.GRAVITY = 2
         self.TERMINAL_VELOCITY = 48
+        self.JUMP_POWER = 25
         self.SPEED = 8
 
     def check_col(self, dx, dy):
         # Create hitboxes for horizontal and vertical movement
         horizontal_hitbox = pygame.Rect(
-            self.rect.x + dx, self.rect.y, self.WIDTH, self.HEIGHT)
+            self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height)
         vertical_hitbox = pygame.Rect(
-            self.rect.x, self.rect.y + dy, self.WIDTH, self.HEIGHT)
+            self.rect.x, self.rect.y + dy, self.rect.width, self.rect.height)
 
         for tile in rects:
             # Check if the tile collides with the horizontal hitbox
@@ -105,7 +102,7 @@ class Player:
         dx, dy = 0, 0
 
         if keys[pygame.K_SPACE] and self.velocity == 0:
-            self.velocity -= 21
+            self.velocity -= self.JUMP_POWER
 
         # Apply gravity and limit velocity to terminal velocity
         self.velocity += self.GRAVITY
@@ -125,7 +122,7 @@ class Player:
         # Check for collisions and adjust movement accordingly
         dx, dy = self.check_col(dx, dy)
 
-        self.rect.mve_ip(dx, dy)
+        self.rect.move_ip(dx, dy)
 
     def draw(self):
         # Draw temporary player sprite
