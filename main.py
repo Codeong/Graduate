@@ -17,53 +17,175 @@ MAX_SPEED = 8
 ACCELERATION = 1
 FRICTION = 0.7
 
-MAP = [
-    '####################################',
-    '#                                  #',
-    '#                                  #',
-    '#                         #####    #',
-    '#                                  #',
-    '#  #######                         #',
-    '#                                  #',
-    '#                  #####           #',
-    '#                                  #',
-    '#                                  #',
-    '#                                  #',
-    '#      ######              #####   #',
-    '#                                  #',
-    '#                                  #',
-    '#                                  #',
-    '#               #####              #',
-    '#                                  #',
-    '#                                  #',
-    '#                                  #',
-    '#       #######                  ###',
-    '#                           ##     #',
-    '#                     ##           #',
-    '######                             #',
-    '#                 ##               #',
-    '#                                  #',
-    '#             ##                   #',
-    '#                                  #',
-    '#                                  #',
-    '#         ##                       #',
-    '####################################',
-]
-
 # Set clock for frequency of updates in game loop.
 clock = pygame.time.Clock()
 
 # Configurate window resolution.
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# Define list to contain barriers.
-rects = []
-for y, row in enumerate(MAP):
-    for x, block in enumerate(row):
-        if block == "#":
-            # Appending Rect object to rect list to blit barrier
-            # tiles and check collisions further on.
-            rects.append(pygame.Rect(x * 32, y * 32, 32, 32))
+room_index = 0
+
+
+class Scene:
+    """Class representing a level or 'room'.
+    
+    Arguments:
+    tilemap -- a list of strings representing the level.
+    """
+
+    def __init__(self, tilemap: tuple, image: pygame.Surface = None):
+        self.TILESIZE = 32
+        self.image = image
+        self.rects = self._get_rects(tilemap)
+        self.ladder = pygame.image.load(os.path.join("assets", "ladder.png"))
+        self.stair = pygame.image.load(os.path.join("assets", "stair.png"))
+
+    def _get_rects(self, tilemap: tuple) -> tuple:
+        # Get all the rects from the tilemap
+
+        rects = []
+        for y, row in enumerate(tilemap):
+            for x, block in enumerate(row):
+                if block != " ":
+                    boundaries = [
+                        "wall", "ladder", "left_stair", "right_stair"
+                    ]
+                    rects.append(
+                        (boundaries[int(block)],
+                         pygame.Rect(x * self.TILESIZE, y * self.TILESIZE,
+                                     self.TILESIZE, self.TILESIZE)))
+        return tuple(rects)
+
+    def draw(self, surface: pygame.Surface):
+        """Draws the level.
+        
+        Arguments:
+        suurface -- the pygame.Surface to draw onto
+        """
+        for tile_type, rect in self.rects:
+            match tile_type:
+                case "wall":
+                    pygame.draw.rect(surface, (60, 60, 60), rect)
+
+                case "ladder":
+                    surface.blit(self.ladder, (rect.x, rect.y))
+
+                case "left_stair":
+                    surface.blit(self.stair, (rect.x, rect.y))
+
+                case "right_stair":
+                    surface.blit(
+                        pygame.transform.flip(self.stair, True, False),
+                        (rect.x, rect.y))
+
+            # if type == "wall":
+            #     pygame.draw.rect(surface, (60, 60, 60), rect)
+
+            # elif type == "ladder":
+            #     pygame.blit(ladder, (rect.x, rect.y))
+
+            # else:
+            #     pygame.blit(stair, (rect.x, rect.y))
+
+
+rooms = [
+    Scene([
+        '000000000000000000000000000000000000',
+        '0                                  0',
+        '0                0                 0',
+        '0               00                 0',
+        '0              0 0                 0',
+        '0                0                 0',
+        '0                0                 0',
+        '0                0                 0',
+        '0                0                 0',
+        '0                0                 0',
+        '0                0                 0',
+        '0              00000               0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                   ',
+        '0                                   ',
+        '0                         2         ',
+        '0                        20         ',
+        '0                       200         ',
+        '000000000000000000000000000000000000',
+    ]),
+    Scene([
+        '000000000000000000000000000000000000',
+        '0                                  0',
+        '0             000000               0',
+        '0            0      0              0',
+        '0            0      0              0',
+        '0                  00              0',
+        '0                 00               0',
+        '0                00                0',
+        '0              00                  0',
+        '0             0                    0',
+        '0             00000000             0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                   ',
+        '0                                   ',
+        '0                                   ',
+        '0                               0000',
+        '0                                   ',
+        '                                    ',
+        '                                    ',
+        '            2   3                   ',
+        '           20   03                  ',
+        '          200   003                 ',
+        '000000000000000000000000000000000000',
+    ]),
+    Scene([
+        '000000000000000000000000000000000000',
+        '0                                  0',
+        '0            000000                0',
+        '0                  0               0',
+        '0                   0              0',
+        '0                   0              0',
+        '0                  0               0',
+        '0            000000                0',
+        '0                 00               0',
+        '0                  00              0',
+        '0                   0              0',
+        '0                  00              0',
+        '0            00   00               0',
+        '0             00000                0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '0                                  0',
+        '                          1        0',
+        '                          1        0',
+        '                          1        0',
+        '00000000    0000000000000 1        0',
+        '                          1        0',
+        '                          1        0',
+        '                          1        0',
+        '                          1        0',
+        '                          1        0',
+        '                          1        0',
+        '000000000000000000000000000000000000',
+    ])
+]
 
 
 class Player:
@@ -105,30 +227,45 @@ class Player:
         vertical_hitbox = pygame.Rect(self.rect.x, self.rect.y + dy,
                                       self.width, self.height)
 
-        for tile in rects:
-            # Check if the tile collides with the horizontal
-            # hitbox.
-            if tile.colliderect(horizontal_hitbox):
-                # Make the player unable to move horizontally.
-                dx = 0
-                self.x_velocity = 0
-
-            # Check if the tile collides with the vertical
-            # hitbox.
-            if tile.colliderect(vertical_hitbox):
-                # Check if player is falling.
-                if dy < 0:
-                    # Move bottom of player to top of the
-                    # tile collided with.
-                    dy = tile.bottom - self.rect.top
-                    self.y_velocity = 2
-
-                # Check if player has upwards velocity.
-                elif dy > 0:
-                    # Move top of player to bottom of the
-                    # tile collided with.
-                    dy = tile.top - self.rect.bottom
+        for tile_type, tile in rooms[room_index].rects:
+            if tile_type == "ladder":
+                if tile.colliderect(self.rect) and (
+                        keys[pygame.K_SPACE]
+                        or keys[pygame.K_w]) and self.y_velocity <= 0:
                     self.y_velocity = 0
+                    dy = -8
+
+            elif tile_type == "wall":
+                if tile.colliderect(horizontal_hitbox):
+                    dx = 0
+                    self.x_velocity = 0
+
+                if tile.colliderect(vertical_hitbox):
+                    if dy < 0:
+                        self.y_velocity = 2
+                        dy = tile.bottom - self.rect.top
+                        return dx, dy
+
+                    elif dy > 0:
+                        self.y_velocity = 0
+                        dy = tile.top - self.rect.bottom
+
+            elif tile.colliderect(horizontal_hitbox):
+                direction = tile_type.split("_")[0]
+
+                if direction == "left":
+                    if dx > 0 or tile.colliderect(vertical_hitbox):
+                        self.y_velocity = 0
+                        dy = tile.top - self.rect.bottom
+                        return dx, dy
+
+                else:
+                    if dx < 0 or tile.colliderect(vertical_hitbox):
+                        self.y_velocity = 0
+                        dy = tile.top - self.rect.bottom
+                        return dx, dy
+
+                dx = 0
 
         return dx, dy
 
@@ -190,8 +327,8 @@ class Player:
             image_index = 0
 
         # Draw the player.
-        win.blit(self.moving_sprites[self.direction][image_index],
-                 (self.rect.x, self.rect.y))
+        surface.blit(self.moving_sprites[self.direction][image_index],
+                     (self.rect.x, self.rect.y))
 
     def update(self, surface: pygame.Surface):
         """Updates the player for the frame.
@@ -214,11 +351,19 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # Render tiles.
+    # Detect if the player is exiting the room.
+    if player.rect.right < 0:
+        room_index -= 1
+        player.rect.left = WIDTH
+        player.rect.y -= 5
+    if player.rect.left > WIDTH:
+        room_index += 1
+        player.rect.right = 0
+        player.rect.y -= 5
+
     win.fill((100, 131, 176))
     player.update(win)
-    for rect in rects:
-        pygame.draw.rect(win, (60, 60, 60), rect)
-    pygame.display.flip()
+    rooms[room_index].draw(win)
 
     clock.tick(60)
+    pygame.display.flip()
