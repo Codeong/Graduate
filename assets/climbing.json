@@ -1,0 +1,54 @@
+{
+    "frames": {
+        "climbing0.png": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 36,
+                "h": 73
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 36,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 36,
+                "h": 73
+            }
+        },
+        "climbing1.png": {
+            "frame": {
+                "x": 36,
+                "y": 0,
+                "w": 36,
+                "h": 73
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 36,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 36,
+                "h": 73
+            }
+        }
+    },
+    "meta": {
+        "app": "https://github.com/piskelapp/piskel/",
+        "version": "1.0",
+        "image": "climbing.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 72,
+            "h": 73
+        }
+    }
+}
