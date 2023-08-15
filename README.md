@@ -2,6 +2,6 @@
 A Code Club project
 
 # Credits
-- vSparkyy (Harshil)
+- vSparklyy (Harshil)
 - jarmishan (Jarmishan)
 - Effley (Mark)
