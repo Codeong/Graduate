@@ -78,14 +78,17 @@ class Scene:
                         pygame.transform.flip(self.stair, True, False),
                         (rect.x, rect.y))
 
-            # if type == "wall":
+            # if tile_type == "wall":
             #     pygame.draw.rect(surface, (60, 60, 60), rect)
 
-            # elif type == "ladder":
-            #     pygame.blit(ladder, (rect.x, rect.y))
+            # elif tile_type == "ladder":
+            #     surface.blit(self.ladder, (rect.x, rect.y))
 
-            # else:
-            #     pygame.blit(stair, (rect.x, rect.y))
+            # elif tile_type == "left_stair":
+            #     surface.blit(self.stair, (rect.x, rect.y))
+                
+            # elif tile_type == "right_stair":
+            #     win.blit(pygame.transform.flip(self.stair, True, False), (rect.x, rect.y))
 
 
 rooms = [
